@@ -15,4 +15,11 @@
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="9.0.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="Domain\Domain.csproj" />
+    <ProjectReference Include="Api\Api.csproj" />
+    <ProjectReference Include="Application\Application.csproj" />
+    <ProjectReference Include="Infrastructure\Infrastructure.csproj" />
+  </ItemGroup>
+
 </Project>
