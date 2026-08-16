@@ -27,4 +27,17 @@ public class AuthController : ControllerBase
             Data = login
         });
     }
+
+    [HttpPost("/register")]
+    public async Task<IActionResult> RegisterUser(RegisterDTO registerDTO)
+    {
+        var register = await _authServices.RegisterUser(registerDTO);
+
+        return Ok(new Response<RegisterDTO>
+        {
+            Success = true,
+            Message = "Register API Executed",
+            Data = register
+        });
+    }
 }
