@@ -10,6 +10,7 @@ builder.Services.AddOpenApi();
 
 builder.Services.AddSingleton<EnvLoad>();
 builder.Services.AddSingleton<RepoDI>();
+builder.Services.AddSingleton<ServiceDI>();
 
 var app = builder.Build();
 
