@@ -10,7 +10,7 @@ public static class IdentitySeed
     public static async Task SeedData(IServiceProvider serviceProvider)
     {
         var local = new EnvLoad();
-        var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole<Guid>>>();
+        var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
         var userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
 
         string[] roles = { "Management", "Kitchen", "Admin" };
@@ -19,25 +19,32 @@ public static class IdentitySeed
         {
             if (!await roleManager.RoleExistsAsync(role))
             {
-                await roleManager.CreateAsync(new IdentityRole<Guid>(role));
+                await roleManager.CreateAsync(new IdentityRole(role));
             }
         }
 
         var adminEmail = local.AdminEmail;
-        if (await userManager.FindByEmailAsync(adminEmail) is null)
+        var foundEmail = await userManager.FindByEmailAsync(adminEmail);
+        Console.WriteLine($"The admin email fetched was not found: {foundEmail}");
+        if (await userManager.FindByEmailAsync(adminEmail) == null || adminEmail.ToString() == null)
         {
             var admin = new ApplicationUser
             {
+                FullName = "Aryan",
                 UserName = "Aryan",
                 Email = adminEmail,
                 IsActive = true
             };
 
             var result = await userManager.CreateAsync(admin, local.AdminPassword);
-            if (result.Succeeded)
+            if (!result.Succeeded)
             {
-                await userManager.AddToRoleAsync(admin, "Admin");
+                foreach (var error in result.Errors)
+                {
+                    throw new Exception($"Admin registration could not be done due to the following reasons: {error.Description}");
+                }
             }
+            await userManager.AddToRoleAsync(admin, "Admin");
         }
     }
 }
