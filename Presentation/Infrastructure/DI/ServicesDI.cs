@@ -8,6 +8,7 @@ public class ServiceDI
     public static IServiceCollection ServiceInjection(IServiceCollection services)
     {
         services.AddScoped<AuthServices>();
+        services.AddScoped<AdminServices>();
 
         return services;
     }
