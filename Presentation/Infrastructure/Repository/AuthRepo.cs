@@ -13,8 +13,9 @@ public class AuthRepo : IAuthRepo
         _signInManager = signInManager;
     }
 
-    public async Task<SignInResult> LoginUser(ApplicationUser user)
+    public async Task<SignInResult> LoginUser(ApplicationUser user, string passowrd)
     {
-        return await _signInManager.CheckPasswordSignInAsync(user, user.PasswordHash, false);
+        Console.WriteLine($"AuthRepo is getting the following data: {user}, {passowrd}");
+        return await _signInManager.CheckPasswordSignInAsync(user, passowrd, false);
     }
 }
