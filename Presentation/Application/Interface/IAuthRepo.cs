@@ -5,5 +5,5 @@ namespace OrderManagement.Application.Interface;
 
 public interface IAuthRepo
 {
-    Task<SignInResult> LoginUser(ApplicationUser user);
+    Task<SignInResult> LoginUser(ApplicationUser user, string passowrd);
 }
