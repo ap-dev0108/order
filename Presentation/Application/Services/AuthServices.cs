@@ -19,7 +19,6 @@ public class AuthServices
 
     public async Task<string> LoginUser(LoginDTO loginDTO)
     {
-
         var userExists = await _userManager.FindByEmailAsync(loginDTO.Email);
 
         if (userExists?.Email is null)
