@@ -6,6 +6,7 @@ using OrderManagement.Infrastructure.Load;
 using OrderManagement.Infrastructure.Persistence;
 using OrderManagement.Infrastructure.Seed;
 using DotNetEnv;
+using OrderManagement.Api.Exceptions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -57,6 +58,8 @@ using (var scope = app.Services.CreateScope())
     var services = scope.ServiceProvider;
     await IdentitySeed.SeedData(services);
 }
+
+app.UseMiddleware<GlobalException>();
 
 app.UseHttpsRedirection();
 app.MapControllers();
