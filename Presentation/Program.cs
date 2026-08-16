@@ -1,3 +1,4 @@
+using OrderManagement.Infrastructure.DI;
 using OrderManagement.Infrastructure.Load;
 using OrderManagement.Infrastructure.Seed;
 
@@ -8,6 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddOpenApi();
 
 builder.Services.AddSingleton<EnvLoad>();
+builder.Services.AddSingleton<RepoDI>();
 
 var app = builder.Build();
 
