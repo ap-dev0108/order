@@ -1,20 +1,31 @@
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using OrderManagement.Application.Identity;
 using OrderManagement.Infrastructure.DI;
 using OrderManagement.Infrastructure.Load;
+using OrderManagement.Infrastructure.Persistence;
 using OrderManagement.Infrastructure.Seed;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
+builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 
 builder.Services.AddSingleton<EnvLoad>();
-builder.Services.AddSingleton<RepoDI>();
-builder.Services.AddSingleton<ServiceDI>();
+
+var envLoad = new EnvLoad();
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseNpgsql(envLoad.DbUrl));
+
+builder.Services.AddIdentity<ApplicationUser, IdentityRole<Guid>>()
+    .AddEntityFrameworkStores<AppDbContext>()
+    .AddDefaultTokenProviders();
+
+RepoDI.RepoInjection(builder.Services);
+ServiceDI.ServiceInjection(builder.Services);
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
@@ -26,5 +37,6 @@ using (var scope = app.Services.CreateScope())
 }
 
 app.UseHttpsRedirection();
+app.MapControllers();
 
 app.Run();
