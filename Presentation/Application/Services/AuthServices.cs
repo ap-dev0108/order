@@ -10,11 +10,13 @@ public class AuthServices
 {
     private readonly IAuthRepo _authRepo;
     private readonly UserManager<ApplicationUser> _userManager;
+    private readonly RoleManager<IdentityRole> _roleManager;
 
-    public AuthServices(IAuthRepo authRepo, UserManager<ApplicationUser> userManager)
+    public AuthServices(IAuthRepo authRepo, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
     {
         _userManager = userManager;
         _authRepo = authRepo;
+        _roleManager = roleManager;
     }
 
     public async Task<string> LoginUser(LoginDTO loginDTO)
@@ -31,6 +33,49 @@ public class AuthServices
         }
 
         return "Login Done";
+    }
+
+    public async Task<RegisterDTO> RegisterUser(RegisterDTO registerDTO)
+    {
+        var newUser = new ApplicationUser
+        {
+            FullName = registerDTO.Name,
+            Email = registerDTO.Email,
+            UserName = registerDTO.Name,
+            IsActive = true,
+            Roles = registerDTO.Role
+        };
+
+        var userExists = await _userManager.FindByEmailAsync(registerDTO.Email);
+
+        if (userExists != null)
+        {
+            throw new InvalidOperationException("User with this email already exists. Please login");
+        }
+
+        if (!await _roleManager.RoleExistsAsync(registerDTO.Role))
+        {
+            throw new KeyNotFoundException($"The role: {registerDTO.Role} cannot be found.");
+        }
+
+        if (registerDTO.Role == "Admin")
+        {
+            throw new InvalidOperationException($"You are not allowed to register as an admin");
+        }
+
+        var userRegistration = await _userManager.CreateAsync(newUser, registerDTO.Password);
+
+        if (!userRegistration.Succeeded)
+        {
+            foreach (var error in userRegistration.Errors)
+            {
+                throw new Exception($"Error while registering user: {error.Description}");
+            }
+        }
+
+        await _userManager.AddToRoleAsync(newUser, registerDTO.Role);
+
+        return registerDTO;
     }
 
 }
