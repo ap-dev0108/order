@@ -1,3 +1,4 @@
+using Microsoft.Extensions.DependencyInjection;
 using OrderManagement.Application.Services;
 
 namespace OrderManagement.Infrastructure.DI;
