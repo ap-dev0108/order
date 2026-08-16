@@ -3,8 +3,8 @@ namespace OrderManagement.Infrastructure.Load;
 public class EnvLoad
 {
     public string DbUrl { get; set; } = string.Empty;
-    public string AdminEmail {get; set;} = string.Empty;
-    public string AdminPassword {get; set;} = string.Empty;
+    public string AdminEmail { get; set; } = string.Empty;
+    public string AdminPassword { get; set; } = string.Empty;
 
     public EnvLoad()
     {
@@ -17,7 +17,7 @@ public class EnvLoad
     {
         return Environment.GetEnvironmentVariable(key) ??
             throw new KeyNotFoundException(
-                "Provided key variable cannot be found"
+                $"Provided key variable for {key} cannot be found"
             );
     }
 }
