@@ -7,13 +7,31 @@ using OrderManagement.Infrastructure.Persistence;
 using OrderManagement.Infrastructure.Seed;
 using DotNetEnv;
 using OrderManagement.Api.Exceptions;
+using OrderManagement.Application.DTO;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.AddSecurityDefinition(
+        "Bearer",
+        new OpenApiSecurityScheme
+        {
+            Name = "Authorization",
+            Type = SecuritySchemeType.Http,
+            Scheme = "bearer",
+            BearerFormat = "JWT",
+            In = ParameterLocation.Header,
+            Description = "Enter JWT Bearer token"
+        });
+});
 
 builder.Services.AddSingleton<EnvLoad>();
 
@@ -25,6 +43,32 @@ var envPath = Path.Combine(
 Env.Load(envPath);
 
 var envLoad = new EnvLoad();
+
+var jwtSettings = new AuthenticationSettings
+{
+    TokenSecret = envLoad.jwtKey,
+    Issuer = envLoad.issuer,
+    Audience = envLoad.audience
+};
+builder.Services.AddSingleton(jwtSettings);
+
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(opt =>
+{
+    opt.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+
+        ValidIssuer = jwtSettings.Issuer,
+        ValidAudience = jwtSettings.Audience,
+
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.TokenSecret))
+    };
+});
+
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(envLoad.DbUrl));
 
@@ -62,6 +106,10 @@ using (var scope = app.Services.CreateScope())
 app.UseMiddleware<GlobalException>();
 
 app.UseHttpsRedirection();
+
+app.UseAuthentication();
+app.UseAuthorization();
+
 app.MapControllers();
 
 app.Run();
