@@ -5,12 +5,18 @@ public class EnvLoad
     public string DbUrl { get; set; } = string.Empty;
     public string AdminEmail { get; set; } = string.Empty;
     public string AdminPassword { get; set; } = string.Empty;
+    public string jwtKey { get; set; } = string.Empty;
+    public string issuer {get; set;} = string.Empty;
+    public string audience {get; set;} = string.Empty;
 
     public EnvLoad()
     {
         DbUrl = GetRequired("DATABASE_URL");
         AdminEmail = GetRequired("ADMIN_EMAIL");
         AdminPassword = GetRequired("ADMIN_PASSWORD");
+        jwtKey = GetRequired("JWT_KEY");
+        issuer = GetRequired("AUTHENTICATION_ISSUER");
+        audience = GetRequired("AUTHENTICATION_AUDIENCE");
     }
 
     public static string GetRequired(string key)
