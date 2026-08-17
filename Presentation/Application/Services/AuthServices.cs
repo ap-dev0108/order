@@ -11,12 +11,14 @@ public class AuthServices
     private readonly IAuthRepo _authRepo;
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly RoleManager<IdentityRole> _roleManager;
+    private readonly ITokenService _token;
 
-    public AuthServices(IAuthRepo authRepo, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
+    public AuthServices(IAuthRepo authRepo, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, ITokenService token)
     {
         _userManager = userManager;
         _authRepo = authRepo;
         _roleManager = roleManager;
+        _token = token;
     }
 
     public async Task<string> LoginUser(LoginDTO loginDTO)
@@ -32,7 +34,7 @@ public class AuthServices
             throw new Exception("User login failed");
         }
 
-        return "Login Done";
+        return _token.GenerateTokenAsync(userExists);
     }
 
     public async Task<RegisterDTO> RegisterUser(RegisterDTO registerDTO)
