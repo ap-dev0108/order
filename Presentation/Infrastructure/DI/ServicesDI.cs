@@ -16,6 +16,7 @@ public class ServiceDI
 
         services.AddScoped<UserServices>();
         services.AddScoped<DataHelper>();
+        services.AddScoped<ProductServices>();
 
         return services;
     }
