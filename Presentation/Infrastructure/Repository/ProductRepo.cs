@@ -21,7 +21,7 @@ public class ProductRepo : IProductRepo
 
     public async Task<Ingredient> GetIngredientById(Guid id)
     {
-        return await _db.Ingredients.AsNoTracking().FirstOrDefaultAsync(f => f.Id == id);
+        return await _db.Ingredients.FirstOrDefaultAsync(f => f.Id == id);
     }
 
     public async Task AddIngredients(Ingredient ingredient)
