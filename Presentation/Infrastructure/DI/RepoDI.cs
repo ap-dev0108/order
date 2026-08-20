@@ -14,6 +14,9 @@ public class RepoDI
         services.AddScoped<IAdminRepo, AdminRepo>();
         services.AddScoped<AdminRepo>();
 
+        services.AddScoped<IDataRepo, DataRepo>();
+        services.AddScoped<DataRepo>();
+
         return services;
     }
 }
