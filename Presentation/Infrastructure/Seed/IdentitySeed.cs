@@ -24,8 +24,6 @@ public static class IdentitySeed
         }
 
         var adminEmail = local.AdminEmail;
-        var foundEmail = await userManager.FindByEmailAsync(adminEmail);
-        Console.WriteLine($"The admin email fetched was not found: {foundEmail}");
         if (await userManager.FindByEmailAsync(adminEmail) == null || adminEmail.ToString() == null)
         {
             var admin = new ApplicationUser
