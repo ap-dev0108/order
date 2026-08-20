@@ -1,16 +1,19 @@
 using Microsoft.AspNetCore.Identity;
 using OrderManagement.Application.DTO;
 using OrderManagement.Application.Identity;
+using OrderManagement.Application.Interface;
 
 namespace OrderManagement.Application.Services;
 
 public class UserServices
 {
     private readonly UserManager<ApplicationUser> _userManager;
+    private readonly IDataRepo _data;
 
-    public UserServices(UserManager<ApplicationUser> userManager)
+    public UserServices(UserManager<ApplicationUser> userManager, IDataRepo data)
     {
         _userManager = userManager;
+        _data = data;
     }
 
     public async Task<UserDTO> GetProfile(string userId)
@@ -27,5 +30,17 @@ public class UserServices
         };
 
         return profile;
+    }
+
+    public async Task EditProfile(Guid userID, EditUserDTO edit)
+    {
+        var user = await _userManager.FindByIdAsync(userID.ToString()) ??
+            throw new KeyNotFoundException("User with the provided ID could not be found");
+
+        user.Email = edit.Email;
+        user.UserName = edit.Username;
+        user.FullName = edit.FullName;
+
+        await _data.SaveChangesAsync();
     }
 }
