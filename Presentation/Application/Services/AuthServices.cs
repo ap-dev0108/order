@@ -34,7 +34,7 @@ public class AuthServices
             throw new Exception("User login failed");
         }
 
-        return _token.GenerateTokenAsync(userExists);
+        return await _token.GenerateTokenAsync(userExists);
     }
 
     public async Task<RegisterDTO> RegisterUser(RegisterDTO registerDTO)
