@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OrderManagement.Application.DTO;
 using OrderManagement.Application.Services;
@@ -6,6 +7,7 @@ namespace OrderManagement.Api.Controller;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize(Roles = "Admin")]
 public class AdminController : ControllerBase
 {
     private readonly AdminServices _admin;
