@@ -41,7 +41,7 @@ public class ProductController : ControllerBase
     }
 
     [HttpPost("add")]
-    public async Task<IActionResult> AddProducts(AddProductsDTO addProductsDTO)
+    public async Task<IActionResult> AddProducts([FromBody] AddProductsDTO addProductsDTO)
     {
         await _product.AddIngredients(addProductsDTO);
 
@@ -53,8 +53,8 @@ public class ProductController : ControllerBase
         });
     }
 
-    [HttpPatch("edit")]
-    public async Task<IActionResult> EditProducts(EditProductDTO editProductDTO, Guid productID)
+    [HttpPut("edit")]
+    public async Task<IActionResult> EditProducts([FromBody] EditProductDTO editProductDTO, Guid productID)
     {
         await _product.EditIngredients(editProductDTO, productID);
 
