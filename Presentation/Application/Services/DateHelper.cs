@@ -1,8 +1,6 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using OrderManagement.Application.Identity;
 using OrderManagement.Application.Interface;
 
 namespace OrderManagement.Application.Services;
