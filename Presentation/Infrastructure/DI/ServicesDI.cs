@@ -14,6 +14,9 @@ public class ServiceDI
         services.AddScoped<ITokenService, TokenService>();
         services.AddScoped<TokenService>();
 
+        services.AddScoped<UserServices>();
+        services.AddScoped<DataHelper>();
+
         return services;
     }
 }
