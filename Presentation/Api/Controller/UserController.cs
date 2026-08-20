@@ -38,52 +38,16 @@ public class UserController : ControllerBase
         });
     }
 
-
-    [HttpGet("auth-test")]
-    public IActionResult AuthTest()
+    [HttpPatch("editUser")]
+    public async Task<IActionResult> EditProfile(EditUserDTO editUserDTO, Guid id)
     {
-        return Ok(new
+        await _userServices.EditProfile(id, editUserDTO);
+
+        return Ok(new Response<EditUserDTO>
         {
-            IsAuthenticated = User.Identity?.IsAuthenticated,
-            AuthenticationType = User.Identity?.AuthenticationType,
-            Name = User.Identity?.Name,
-            Claims = User.Claims.Select(c => new
-            {
-                c.Type,
-                c.Value
-            })
-        });
-    }
-
-    [HttpGet("test")]
-    public async Task<IActionResult> Auth()
-    {
-        var defaultAuthenticate = await _schema.GetDefaultAuthenticateSchemeAsync();
-
-        var defaultChallenge =
-            await _schema.GetDefaultChallengeSchemeAsync();
-
-        var defaultScheme =
-            await _schema.GetDefaultSignInSchemeAsync();
-
-        return Ok(new
-        {
-            DefaultScheme = defaultScheme?.Name,
-            DefaultAuthenticateScheme = defaultAuthenticate?.Name,
-            DefaultChallengeScheme = defaultChallenge?.Name
-        });
-    }
-
-    [HttpGet("auth-debug")]
-    public IActionResult AuthDebug()
-    {
-        var authHeader = Request.Headers.Authorization.ToString();
-
-        return Ok(new
-        {
-            AuthorizationHeader = authHeader,
-            IsAuthenticated = User.Identity?.IsAuthenticated,
-            AuthenticationType = User.Identity?.AuthenticationType
+            Success = true,
+            Message = "Edit user api fetched",
+            Data = editUserDTO
         });
     }
 }
