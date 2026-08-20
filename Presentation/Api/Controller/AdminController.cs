@@ -27,4 +27,17 @@ public class AdminController : ControllerBase
             Data = userLists
         });
     }
+
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetUserById(string id)
+    {
+        var userById = await _admin.GetUsersById(id);
+
+        return Ok(new Response<UserDTO>
+        {
+            Success = true,
+            Message = "User fetched",
+            Data = userById
+        });
+    }
 }
