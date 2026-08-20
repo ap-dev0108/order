@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using OrderManagement.Application.DTO.Products;
 using OrderManagement.Application.Interface;
@@ -66,15 +67,13 @@ public class ProductServices
     public async Task EditIngredients(EditProductDTO editProductDTO, Guid id)
     {
         var product = await _productRepo.GetIngredientById(id) ??
-            throw new KeyNotFoundException($"Product with the ID: {id} cannot be found");
+            throw new KeyNotFoundException("Product with ID cannot be found");
 
-        editProductDTO.addProductsDTO.Title = product.Title;
-        editProductDTO.addProductsDTO.QualityOnHand = product.QualityOnHand;
-        editProductDTO.addProductsDTO.ReorderThreshold = product.ReorderThreshold;
-        editProductDTO.addProductsDTO.Units = product.Units;
-        editProductDTO.addProductsDTO.UpdatedAt = product.UpdatedAt;
-        editProductDTO.LastUpdated = DateTime.UtcNow;
-        editProductDTO.Notes = "";
+        product.Title = editProductDTO.Title;
+        product.QualityOnHand = editProductDTO.QualityOnHand;
+        product.ReorderThreshold = editProductDTO.ReorderThreshold;
+        product.Units = editProductDTO.Units;
+        product.UpdatedAt = editProductDTO.LastUpdated;
 
         await _dataRepo.SaveChangesAsync();
     }
