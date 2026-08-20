@@ -10,7 +10,7 @@ namespace OrderManagement.Api.Controller;
 
 [ApiController]
 [Route("api/[controller]")]
-
+[Authorize(Roles = "Kitchen")]
 public class UserController : ControllerBase
 {
     private readonly DataHelper _helper;
