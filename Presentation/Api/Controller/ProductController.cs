@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OrderManagement.Application.DTO;
 using OrderManagement.Application.DTO.Products;
@@ -5,6 +6,9 @@ using OrderManagement.Application.Services;
 
 namespace OrderManagement.Api.Controller;
 
+[ApiController]
+[Route("api/[controller]")]
+[Authorize(Roles = "Management")]
 public class ProductController : ControllerBase
 {
     private readonly ProductServices _product;
