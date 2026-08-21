@@ -56,6 +56,18 @@ public class TableServices
         await _tableRepo.AddRestaurantTable(tableToAdd);
         await _data.SaveChangesAsync();
     }
+    public async Task EditTableData(Guid id, EditTableDTO editTableDTO)
+    {
+        var tableToEdit = await _tableRepo.GetRestaurantTableByIdAsync(id) ??
+            throw new KeyNotFoundException($"Table with the ID: {id} cannot be found");
+
+        tableToEdit.TableNumber = editTableDTO.TableNumber;
+        tableToEdit.QrCodeToken = editTableDTO.QrCodeToken;
+        tableToEdit.Capacity = editTableDTO.Capacity;
+        tableToEdit.IsActive = editTableDTO.IsActive;
+
+        await _data.SaveChangesAsync();
+    }
     public async Task RemoveTables(Guid id)
     {
         var tableToRemove = await _tableRepo.GetRestaurantTableByIdAsync(id) ??
