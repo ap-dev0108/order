@@ -21,7 +21,7 @@ public class TableRepo : ITableRepo
 
     public async Task<RestaurantTable> GetRestaurantTableByIdAsync(Guid id)
     {
-        return await _db.RestaurantTables.AsNoTracking().FirstOrDefaultAsync(f => f.Id == id);
+        return await _db.RestaurantTables.FirstOrDefaultAsync(f => f.Id == id);
     }
 
     public async Task AddRestaurantTable(RestaurantTable restaurantTable)

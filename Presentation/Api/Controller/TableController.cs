@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
 using OrderManagement.Application.DTO;
 using OrderManagement.Application.DTO.Table;
 using OrderManagement.Application.Services;
@@ -53,6 +52,19 @@ public class TableController : ControllerBase
             Success = true,
             Message = "Table added",
             Data = addTableDTO
+        });
+    }
+
+    [HttpPut("edit")]
+    public async Task<IActionResult> EditTables(Guid id, EditTableDTO editTableDTO)
+    {
+        await _tableServices.EditTableData(id, editTableDTO);
+
+        return Ok(new Response<EditTableDTO>
+        {
+            Success = true,
+            Message = "Table is edited",
+            Data = editTableDTO
         });
     }
 
