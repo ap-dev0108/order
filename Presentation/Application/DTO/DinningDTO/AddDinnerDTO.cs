@@ -5,8 +5,6 @@ namespace OrderManagement.Application.DTO.Dinning;
 
 public class AddDinnerDTO
 {
-    public Guid Id {get; set;} = Guid.NewGuid();
-
     public Guid TableId {get; set;}
     public RestaurantTable Table {get; set;}
 
