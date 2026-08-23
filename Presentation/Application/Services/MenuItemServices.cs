@@ -11,11 +11,13 @@ public class MenuItemServices
 {
     private readonly IMenuItem _menu;
     private readonly IDataRepo _data;
+    private readonly ISearchable _searchable;
 
-    public MenuItemServices(IMenuItem menu, IDataRepo data)
+    public MenuItemServices(IMenuItem menu, IDataRepo data, ISearchable searchable)
     {
         _menu = menu;
         _data = data;
+        _searchable = searchable;
     }
 
     public async Task<List<DisplayMenuItem>> GetMenuItemsAsync()
@@ -72,6 +74,12 @@ public class MenuItemServices
             Ingredients = createMenuItem.Ingredients,
             IsAvailable = createMenuItem.IsAvailable     
         };
+
+        var MenuTitleExists = await _searchable.SearchByNameAsync<MenuItem>(m => m.MenuItemTitle == createMenuItem.MenuItemTitle);
+        if (MenuTitleExists.Any())
+        {
+            throw new InvalidOperationException("Menu title already exists");
+        }
 
         await _menu.AddMenus(MenuToAdd);
         await _data.SaveChangesAsync();
