@@ -8,11 +8,13 @@ public class MenuCategoryService
 {
     private readonly IMenuCategoryRepo _menuCategory;
     private readonly IDataRepo _data;
+    private readonly ISearchable _search;
 
-    public MenuCategoryService(IMenuCategoryRepo menuCategoryRepo, IDataRepo data)
+    public MenuCategoryService(IMenuCategoryRepo menuCategoryRepo, IDataRepo data, ISearchable search)
     {
         _menuCategory = menuCategoryRepo;
         _data = data;
+        _search = search;
     }
 
     public async Task<List<DisplayMenuCategory>> GetMenuCategoriesAsync()
@@ -22,7 +24,7 @@ public class MenuCategoryService
         return menuCategoriesList.Select(s => new DisplayMenuCategory
         {
             Id = s.Id,
-            MenuCategoryTitle = s.MenuCategoryTitle,           
+            MenuCategoryTitle = s.MenuCategoryTitle,
         }).ToList();
     }
 
@@ -44,6 +46,13 @@ public class MenuCategoryService
             MenuCategoryTitle = createMenuCategory.MenuCategoryTitle,
             DisplayOrder = createMenuCategory.DisplayOrder
         };
+
+        var CategoryExists = await _search.SearchByNameAsync<MenuCategory>(m => m.MenuCategoryTitle.Contains(createMenuCategory.MenuCategoryTitle));
+
+        if (CategoryExists.Any())
+        {
+            throw new InvalidOperationException("Category with the same title exists");
+        }
 
         await _menuCategory.AddMenuCategory(CategoryToAdd);
         await _data.SaveChangesAsync();
