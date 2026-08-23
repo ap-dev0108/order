@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace OrderManagement.Infrastructure.Repo;
 
-public class Searchable
+public class Searchable : ISearchable
 {
     private readonly AppDbContext _db;
 
