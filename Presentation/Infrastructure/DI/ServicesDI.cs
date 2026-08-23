@@ -10,13 +10,13 @@ public class ServiceDI
     {
         services.AddScoped<AuthServices>();
         services.AddScoped<AdminServices>();
-
-        services.AddScoped<ITokenService, TokenService>();
-        services.AddScoped<TokenService>();
-
         services.AddScoped<UserServices>();
         services.AddScoped<DataHelper>();
         services.AddScoped<ProductServices>();
+        services.AddScoped<DinningServices>();
+
+        services.AddScoped<ITokenService, TokenService>();
+        services.AddScoped<TokenService>();
 
         return services;
     }

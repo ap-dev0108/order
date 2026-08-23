@@ -23,6 +23,9 @@ public class RepoDI
         services.AddScoped<ITableRepo, TableRepo>();
         services.AddScoped<TableRepo>();
 
+        services.AddScoped<IDinningRepo, DinningRepo>();
+        services.AddScoped<DinningRepo>();
+
         return services;
     }
 }
