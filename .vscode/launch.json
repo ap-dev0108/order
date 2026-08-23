@@ -1,0 +1,22 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Run Presentation API",
+      "type": "coreclr",
+      "request": "launch",
+      "program": "${workspaceFolder}/Presentation/bin/Debug/net9.0/Presentation.dll",
+      "cwd": "${workspaceFolder}/Presentation",
+      "console": "integratedTerminal",
+      "stopAtEntry": false,
+      "requireExactSource": false,
+      "env": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "serverReadyAction": {
+        "action": "openExternally",
+        "pattern": "Now listening on:.*"
+      }
+    }
+  ]
+}

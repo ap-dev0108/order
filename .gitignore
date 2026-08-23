@@ -3,9 +3,9 @@ obj/
 node_modules
 *.user
 *.log
-
 /appsettings.Development.json
 *.env
 !.env.example
 .env.local
 #
+
