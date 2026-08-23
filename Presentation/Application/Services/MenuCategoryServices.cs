@@ -43,15 +43,16 @@ public class MenuCategoryService
     {
         var CategoryToAdd = new MenuCategory
         {
-            MenuCategoryTitle = createMenuCategory.MenuCategoryTitle,
+            MenuCategoryTitle = createMenuCategory.MenuCategoryTitle.ToLower(),
             DisplayOrder = createMenuCategory.DisplayOrder
         };
 
         var CategoryExists = await _search.SearchByNameAsync<MenuCategory>(m => m.MenuCategoryTitle.Contains(createMenuCategory.MenuCategoryTitle));
+        var CategoryOrderExists = await _search.SearchByNameAsync<MenuCategory>(m => m.DisplayOrder == createMenuCategory.DisplayOrder);
 
-        if (CategoryExists.Any())
+        if (CategoryExists.Any() && CategoryOrderExists.Any())
         {
-            throw new InvalidOperationException("Category with the same title exists");
+            throw new InvalidOperationException("Category Title or Order already exists");
         }
 
         await _menuCategory.AddMenuCategory(CategoryToAdd);
