@@ -14,8 +14,8 @@ public class Searchable
         _db = db;
     }
 
-    public async Task<List<T>> SearchByNameAsync<T>(string term) where T : class, ISerachable
+    public async Task<List<T>> SearchByNameAsync<T>(Expression<Func<T, bool>> predicate) where T : class
     {
-        return await _db.Set<T>().Where(x => x.Name.Contains(term)).ToListAsync();
+        return await _db.Set<T>().Where(predicate).ToListAsync();
     }
 }
