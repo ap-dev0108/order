@@ -2,7 +2,7 @@ using System.Linq.Expressions;
 
 namespace OrderManagement.Application.Interface;
 
-public interface ISerachable<T>
+public interface ISerachable
 {
-    Task<List<T>> SearchTerm<T>(Expression<Func<T, bool>> predicate);
+    string Name {get; set;}
 }
