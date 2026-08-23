@@ -2,7 +2,7 @@ using System.Linq.Expressions;
 
 namespace OrderManagement.Application.Interface;
 
-public interface ISerachable
+public interface ISearchable
 {
-    string Name {get; set;}
+    Task<List<T>> SearchByNameAsync<T>(Expression<Func<T, bool>> predicate) where T :class;
 }
