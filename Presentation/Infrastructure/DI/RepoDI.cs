@@ -29,6 +29,9 @@ public class RepoDI
         services.AddScoped<IMenuCategoryRepo, MenuCategoryRepo>();
         services.AddScoped<MenuCategoryRepo>();
 
+        services.AddScoped<IMenuItem, MenuItemRepo>();
+        services.AddScoped<MenuItemRepo>();
+
         return services;
     }
 }
