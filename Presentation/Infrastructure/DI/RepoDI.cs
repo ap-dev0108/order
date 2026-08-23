@@ -26,6 +26,9 @@ public class RepoDI
         services.AddScoped<IDinningRepo, DinningRepo>();
         services.AddScoped<DinningRepo>();
 
+        services.AddScoped<IMenuCategoryRepo, MenuCategoryRepo>();
+        services.AddScoped<MenuCategoryRepo>();
+
         return services;
     }
 }
