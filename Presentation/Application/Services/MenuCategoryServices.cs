@@ -43,7 +43,7 @@ public class MenuCategoryService
     {
         var CategoryToAdd = new MenuCategory
         {
-            MenuCategoryTitle = createMenuCategory.MenuCategoryTitle,
+            MenuCategoryTitle = createMenuCategory.MenuCategoryTitle.ToLower(),
             DisplayOrder = createMenuCategory.DisplayOrder
         };
 
