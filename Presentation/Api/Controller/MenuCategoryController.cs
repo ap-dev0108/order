@@ -90,7 +90,7 @@ public class MenuCategoryController : ControllerBase
     [HttpGet("search")]
     public async Task<IActionResult> Search([FromQuery] string term)
     {
-        var search = await _searchable.SearchByNameAsync<MenuCategory>(m => m.MenuCategoryTitle == term);
+        var search = await _searchable.SearchByNameAsync<MenuCategory>(m => m.MenuCategoryTitle == term.ToLower());
 
         return Ok(new Response<List<MenuCategory>>
         {
