@@ -32,6 +32,8 @@ public class RepoDI
         services.AddScoped<IMenuItem, MenuItemRepo>();
         services.AddScoped<MenuItemRepo>();
 
+        services.AddScoped<Searchable>();
+
         return services;
     }
 }
