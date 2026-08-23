@@ -7,6 +7,8 @@ using OrderManagement.Infrastructure.Persistence;
 
 namespace OrderManagement.Api.Controller;
 
+[ApiController]
+[Route("api/[controller]")]
 public class MenuCategoryController : ControllerBase
 {
     private readonly MenuCategoryService _menu;

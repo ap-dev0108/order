@@ -5,6 +5,8 @@ using OrderManagement.Application.Services;
 
 namespace OrderManagement.Api.Controller;
 
+[ApiController]
+[Route("api/[controller]")]
 public class MenuItemController : ControllerBase
 {
     private readonly MenuItemServices _menuServices;
