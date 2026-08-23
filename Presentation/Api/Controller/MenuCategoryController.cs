@@ -2,7 +2,9 @@ using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
 using OrderManagement.Application.DTO;
 using OrderManagement.Application.DTO.Menu.Category;
+using OrderManagement.Application.Interface;
 using OrderManagement.Application.Services;
+using OrderManagement.Domain.Entities;
 using OrderManagement.Infrastructure.Persistence;
 
 namespace OrderManagement.Api.Controller;
@@ -12,10 +14,12 @@ namespace OrderManagement.Api.Controller;
 public class MenuCategoryController : ControllerBase
 {
     private readonly MenuCategoryService _menu;
+    private readonly ISearchable _searchable;
 
-    public MenuCategoryController(MenuCategoryService menu)
+    public MenuCategoryController(MenuCategoryService menu, ISearchable searchable)
     {
         _menu = menu;
+        _searchable = searchable;
     }
 
     [HttpGet("all")]
@@ -80,6 +84,19 @@ public class MenuCategoryController : ControllerBase
             Success = true,
             Message = "Menu Category Removed successfully",
             Data = menuID.ToString()
+        });
+    }
+
+    [HttpGet("search")]
+    public async Task<IActionResult> Search([FromQuery] string term)
+    {
+        var search = await _searchable.SearchByNameAsync<MenuCategory>(m => m.MenuCategoryTitle == term);
+
+        return Ok(new Response<List<MenuCategory>>
+        {
+            Success = true,
+            Message = "Search api executed",
+            Data = search
         });
     }
 }
