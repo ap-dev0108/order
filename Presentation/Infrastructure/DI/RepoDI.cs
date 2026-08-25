@@ -35,6 +35,9 @@ public class RepoDI
         services.AddScoped<ISearchable, Searchable>();
         services.AddScoped<Searchable>();
 
+        services.AddScoped<IProductTransaction, ProductTransactionRepo>();
+        services.AddScoped<ProductTransactionRepo>();
+
         return services;
     }
 }
