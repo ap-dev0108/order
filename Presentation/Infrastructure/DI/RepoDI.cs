@@ -37,6 +37,9 @@ public class RepoDI
 
         services.AddScoped<IOrderRepo, OrderRepo>();
         services.AddScoped<OrderRepo>();
+      
+        services.AddScoped<IProductTransaction, ProductTransactionRepo>();
+        services.AddScoped<ProductTransactionRepo>();
 
         return services;
     }

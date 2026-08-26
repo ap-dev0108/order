@@ -18,6 +18,7 @@ public class ServiceDI
         services.AddScoped<MenuItemServices>();
         services.AddScoped<OrderServices>();
         services.AddScoped<OrderStateMachine>();
+        services.AddScoped<ProductTransactionServices>();
 
         services.AddScoped<ITokenService, TokenService>();
         services.AddScoped<TokenService>();
