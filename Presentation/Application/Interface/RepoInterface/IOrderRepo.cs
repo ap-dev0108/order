@@ -5,8 +5,8 @@ namespace OrderManagement.Application.Interface;
 
 public interface IOrderRepo
 {
-    Task<List<DisplayOrder>> GetOrdersAsync();
-    Task<DisplayOrder> GetOrderByIdAsync(Guid id);
+    Task<List<Order>> GetOrdersAsync();
+    Task<Order> GetOrderByIdAsync(Guid id);
 
     Task AddOrder(Order order);
 
