@@ -19,7 +19,8 @@ public enum OrderStatus
     Preparing = 1,
     Ready = 2,
     Served = 3,
-    Cancelled = 4
+    Cancelled = 4,
+    Completed = 5
 }
 
 public enum PaymentMethod
