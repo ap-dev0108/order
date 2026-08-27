@@ -1,4 +1,4 @@
-using OrderManagement.Application.DTO.Order;
+using OrderManagement.Application.DTO.Orders;
 using OrderManagement.Application.Interface;
 using OrderManagement.Domain.Entities;
 using OrderManagement.Domain.Enum;
