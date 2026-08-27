@@ -19,6 +19,7 @@ public class ServiceDI
         services.AddScoped<OrderServices>();
         services.AddScoped<OrderStateMachine>();
         services.AddScoped<ProductTransactionServices>();
+        services.AddScoped<OrderItemServices>();
 
         services.AddScoped<ITokenService, TokenService>();
         services.AddScoped<TokenService>();
