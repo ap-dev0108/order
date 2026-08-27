@@ -6,6 +6,7 @@ public interface IOrderItemRepo
 {
     Task<List<OrderItem>> GetOrderItemsAsync();
     Task<OrderItem> GetOrderItemsById(Guid id);
+    Task<OrderItem> GetOrderItemByOrder(Guid id);
 
     Task AddOrderItem(OrderItem orderItem);
 
