@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using OrderManagement.Application.DTO;
-using OrderManagement.Application.DTO.Order;
+using OrderManagement.Application.DTO.Orders;
 using OrderManagement.Application.Services;
 
 namespace OrderManagement.Api.Controller;
