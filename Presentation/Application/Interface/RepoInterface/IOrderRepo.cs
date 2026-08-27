@@ -1,4 +1,3 @@
-using OrderManagement.Application.DTO.Order;
 using OrderManagement.Domain.Entities;
 
 namespace OrderManagement.Application.Interface;
