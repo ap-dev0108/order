@@ -1,6 +1,6 @@
 using OrderManagement.Domain.Enum;
 
-namespace OrderManagement.Application.DTO.Order;
+namespace OrderManagement.Application.DTO.Orders;
 
 public class ChangeOrderStatus
 {
