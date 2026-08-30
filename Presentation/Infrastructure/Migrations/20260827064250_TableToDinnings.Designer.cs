@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using OrderManagement.Infrastructure.Persistence;
@@ -11,9 +12,11 @@ using OrderManagement.Infrastructure.Persistence;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260827064250_TableToDinnings")]
+    partial class TableToDinnings
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -238,6 +241,9 @@ namespace Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<DateTime>("EndedAt")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<DateTime>("StartedAt")
                         .HasColumnType("timestamp with time zone");
 
@@ -249,7 +255,8 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("TableId");
+                    b.HasIndex("TableId")
+                        .IsUnique();
 
                     b.ToTable("DinningSessions");
                 });
@@ -321,7 +328,12 @@ namespace Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<Guid?>("MenuItemId")
+                        .HasColumnType("uuid");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("MenuItemId");
 
                     b.ToTable("MenuCategories");
                 });
@@ -339,6 +351,9 @@ namespace Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<Guid>("IngredientId")
+                        .HasColumnType("uuid");
+
                     b.Property<bool>("IsAvailable")
                         .HasColumnType("boolean");
 
@@ -353,8 +368,6 @@ namespace Infrastructure.Migrations
                         .HasColumnType("text");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CategoryId");
 
                     b.ToTable("MenuItems");
                 });
@@ -444,6 +457,9 @@ namespace Infrastructure.Migrations
                     b.Property<int>("Capacity")
                         .HasColumnType("integer");
 
+                    b.Property<Guid>("DinningId")
+                        .HasColumnType("uuid");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("boolean");
 
@@ -513,8 +529,8 @@ namespace Infrastructure.Migrations
             modelBuilder.Entity("OrderManagement.Domain.Entities.DinningSession", b =>
                 {
                     b.HasOne("OrderManagement.Domain.Entities.RestaurantTable", "Table")
-                        .WithMany("DinningSessions")
-                        .HasForeignKey("TableId")
+                        .WithOne("DinningSession")
+                        .HasForeignKey("OrderManagement.Domain.Entities.DinningSession", "TableId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -539,15 +555,11 @@ namespace Infrastructure.Migrations
                     b.Navigation("Ingredients");
                 });
 
-            modelBuilder.Entity("OrderManagement.Domain.Entities.MenuItem", b =>
+            modelBuilder.Entity("OrderManagement.Domain.Entities.MenuCategory", b =>
                 {
-                    b.HasOne("OrderManagement.Domain.Entities.MenuCategory", "Category")
-                        .WithMany()
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Category");
+                    b.HasOne("OrderManagement.Domain.Entities.MenuItem", null)
+                        .WithMany("Category")
+                        .HasForeignKey("MenuItemId");
                 });
 
             modelBuilder.Entity("OrderManagement.Domain.Entities.Order", b =>
@@ -582,12 +594,15 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("OrderManagement.Domain.Entities.MenuItem", b =>
                 {
+                    b.Navigation("Category");
+
                     b.Navigation("Ingredients");
                 });
 
             modelBuilder.Entity("OrderManagement.Domain.Entities.RestaurantTable", b =>
                 {
-                    b.Navigation("DinningSessions");
+                    b.Navigation("DinningSession")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

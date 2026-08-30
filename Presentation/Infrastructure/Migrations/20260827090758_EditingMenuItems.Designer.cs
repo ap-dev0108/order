@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using OrderManagement.Infrastructure.Persistence;
@@ -11,9 +12,11 @@ using OrderManagement.Infrastructure.Persistence;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260827090758_EditingMenuItems")]
+    partial class EditingMenuItems
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -321,7 +324,12 @@ namespace Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<Guid?>("MenuItemId")
+                        .HasColumnType("uuid");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("MenuItemId");
 
                     b.ToTable("MenuCategories");
                 });
@@ -330,9 +338,6 @@ namespace Infrastructure.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("CategoryId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("ImageUrl")
@@ -353,8 +358,6 @@ namespace Infrastructure.Migrations
                         .HasColumnType("text");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CategoryId");
 
                     b.ToTable("MenuItems");
                 });
@@ -539,15 +542,11 @@ namespace Infrastructure.Migrations
                     b.Navigation("Ingredients");
                 });
 
-            modelBuilder.Entity("OrderManagement.Domain.Entities.MenuItem", b =>
+            modelBuilder.Entity("OrderManagement.Domain.Entities.MenuCategory", b =>
                 {
-                    b.HasOne("OrderManagement.Domain.Entities.MenuCategory", "Category")
-                        .WithMany()
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Category");
+                    b.HasOne("OrderManagement.Domain.Entities.MenuItem", null)
+                        .WithMany("Category")
+                        .HasForeignKey("MenuItemId");
                 });
 
             modelBuilder.Entity("OrderManagement.Domain.Entities.Order", b =>
@@ -582,6 +581,8 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("OrderManagement.Domain.Entities.MenuItem", b =>
                 {
+                    b.Navigation("Category");
+
                     b.Navigation("Ingredients");
                 });
 
