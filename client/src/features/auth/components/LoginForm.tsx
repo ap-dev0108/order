@@ -2,6 +2,8 @@ import { useLogin } from "../hooks/useLogin";
 import { useState } from "react";
 import type { LoginData } from "../../../types/auth/AuthType";
 import { Mail, Lock, LogIn } from "lucide-react";
+import axios from "axios";
+import type { ApiError } from "../../../types/error/ApiError";
 
 function LoginForm() {
   const [loginData, setLoginData] = useState<LoginData>({
@@ -14,6 +16,15 @@ function LoginForm() {
   const handleSubmit = (e: React.SubmitEvent) => {
     e.preventDefault();
     loginMutation.mutate(loginData);
+    console.log(loginData);
+  };
+
+  const getErrorMessage = () => {
+    if (axios.isAxiosError<ApiError>(loginMutation.error)) {
+      return loginMutation.error.response?.data?.message;
+    }
+
+    return "Something went wrong";
   };
 
   return (
@@ -93,6 +104,10 @@ function LoginForm() {
             Login
           </button>
         </form>
+
+        {loginMutation.isError && (
+          <p className="text-red-500">{getErrorMessage()}</p>
+        )}
 
         {/* Divider */}
         <hr className="mt-8 mb-6 border-gray-200" />
