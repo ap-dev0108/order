@@ -4,15 +4,12 @@ namespace OrderManagement.Application.DTO.Menu.Items;
 
 public class CreateMenuItem
 {
-    public Guid CategoryId {get; set;}
-    public ICollection<MenuCategory> Category {get; set;}
-
-    public Guid IngredientId {get; set;}
-    public ICollection<Ingredient> Ingredients {get; set;}
-
     public string MenuItemTitle {get; set;} = string.Empty;
     public string? MenuItemDescription {get; set;}
-
+    public Guid CategoryId {get; set;} = Guid.NewGuid();
+    public Guid IngredientId {get; set;} = Guid.NewGuid();
+    public ICollection<MenuCategory> Categories = new List<MenuCategory>();
+    public ICollection<Ingredient> Ingredients = new List<Ingredient>();
     public decimal MenuItemPrice {get; set;}
 
     public bool IsAvailable {get; set;}

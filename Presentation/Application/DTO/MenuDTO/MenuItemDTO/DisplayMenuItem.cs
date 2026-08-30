@@ -7,7 +7,7 @@ public class DisplayMenuItem
     public Guid Id {get; set;} = Guid.NewGuid();
 
     public Guid CategoryId {get; set;}
-    public ICollection<MenuCategory> Category {get; set;}
+    public MenuCategory Category {get; set;}
 
     public Guid IngredientId {get; set;}
     public ICollection<Ingredient> Ingredients {get; set;}
