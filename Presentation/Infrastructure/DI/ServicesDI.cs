@@ -14,6 +14,7 @@ public class ServiceDI
         services.AddScoped<DataHelper>();
         services.AddScoped<ProductServices>();
         services.AddScoped<DinningServices>();
+        services.AddScoped<TableServices>();
         services.AddScoped<MenuCategoryService>();
         services.AddScoped<MenuItemServices>();
         services.AddScoped<OrderServices>();
