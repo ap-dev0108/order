@@ -12,12 +12,16 @@ public class MenuItemServices
     private readonly IMenuItem _menu;
     private readonly IDataRepo _data;
     private readonly ISearchable _searchable;
+    private readonly IProductRepo _ingredients;
+    private readonly IMenuCategoryRepo _category;
 
-    public MenuItemServices(IMenuItem menu, IDataRepo data, ISearchable searchable)
+    public MenuItemServices(IMenuItem menu, IDataRepo data, ISearchable searchable, IProductRepo ingredients, IMenuCategoryRepo category)
     {
         _menu = menu;
         _data = data;
         _searchable = searchable;
+        _category = category;
+        _ingredients = ingredients;
     }
 
     public async Task<List<DisplayMenuItem>> GetMenuItemsAsync()
@@ -30,11 +34,9 @@ public class MenuItemServices
             Id = s.Id,
             MenuItemTitle = s.MenuItemTitle,
             Category = s.Category,
-            CategoryId = s.CategoryId,
             MenuItemDescription = s.MenuItemDescription,
             MenuItemPrice = s.MenuItemPrice,
             ImageUrl = s.ImageUrl,
-            IngredientId = s.IngredientId,
             Ingredients = s.Ingredients,
             IsAvailable = s.IsAvailable
         }).ToList();
@@ -50,30 +52,33 @@ public class MenuItemServices
             Id = MenuById.Id,
             MenuItemTitle = MenuById.MenuItemTitle,
             Category = MenuById.Category,
-            CategoryId = MenuById.CategoryId,
             MenuItemDescription = MenuById.MenuItemDescription,
             MenuItemPrice = MenuById.MenuItemPrice,
             ImageUrl = MenuById.ImageUrl,
-            IngredientId = MenuById.IngredientId,
             Ingredients = MenuById.Ingredients,
             IsAvailable = MenuById.IsAvailable
         };
     }
 
-    public async Task AddMenuItem(CreateMenuItem createMenuItem)
+    public async Task AddMenuItem(Guid categoryId, Guid ingredientId, CreateMenuItem createMenuItem)
     {
+        var categoryExists = await _category.MenuCategoryByIdAsync(categoryId) ??
+            throw new KeyNotFoundException("Category not found");
+
+        var ingredientExists = await _ingredients.GetIngredientById(ingredientId) ??
+            throw new KeyNotFoundException("Ingredient not found");
+
         var MenuToAdd = new MenuItem
         {
             MenuItemTitle = createMenuItem.MenuItemTitle,
-            Category = createMenuItem.Category,
-            CategoryId = createMenuItem.CategoryId,
+            Category = categoryExists,
             MenuItemDescription = createMenuItem.MenuItemDescription,
             MenuItemPrice = createMenuItem.MenuItemPrice,
             ImageUrl = createMenuItem.ImageUrl,
-            IngredientId = createMenuItem.IngredientId,
-            Ingredients = createMenuItem.Ingredients,
-            IsAvailable = createMenuItem.IsAvailable     
+            IsAvailable = createMenuItem.IsAvailable
         };
+
+        MenuToAdd.Ingredients.Add(ingredientExists);
 
         var MenuTitleExists = await _searchable.SearchByNameAsync<MenuItem>(m => m.MenuItemTitle == createMenuItem.MenuItemTitle);
         if (MenuTitleExists.Any())
@@ -90,10 +95,8 @@ public class MenuItemServices
         var MenuTOEdit = await _menu.GetMenuItemsById(menuID) ??
             throw new KeyNotFoundException("Menu with the given ID cannot be found");
 
-        MenuTOEdit.CategoryId = editMenuItem.CategoryId;
         MenuTOEdit.Category = editMenuItem.Category;
         MenuTOEdit.ImageUrl = editMenuItem.ImageUrl;
-        MenuTOEdit.IngredientId = editMenuItem.IngredientId;
         MenuTOEdit.Ingredients = editMenuItem.Ingredients;
         MenuTOEdit.IsAvailable = editMenuItem.IsAvailable;
         MenuTOEdit.MenuItemDescription = editMenuItem.MenuItemDescription;
@@ -101,7 +104,7 @@ public class MenuItemServices
         MenuTOEdit.MenuItemTitle = editMenuItem.MenuItemTitle;
 
         await _data.SaveChangesAsync();
-    } 
+    }
 
     public async Task RemoveMenuItem(Guid menuID)
     {
