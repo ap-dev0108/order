@@ -27,7 +27,8 @@ public class TableServices
             TableNumber = s.TableNumber,
             QrCodeToken = s.QrCodeToken,
             Capacity = s.Capacity,
-            IsActive = s.IsActive
+            IsActive = s.IsActive,
+            Sessions = s.DinningSessions
         }).ToList();
     }
     public async Task<TableDTO> GetRestaurantTablesById(Guid id)
