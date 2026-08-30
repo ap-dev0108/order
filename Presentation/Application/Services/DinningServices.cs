@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Http;
 using OrderManagement.Application.DTO.Dinning;
 using OrderManagement.Application.Interface;
 using OrderManagement.Domain.Entities;
@@ -8,11 +9,13 @@ public class DinningServices
 {
     private readonly IDinningRepo _dinning;
     private readonly IDataRepo _data;
+    private readonly ITableRepo _table;
 
-    public DinningServices(IDinningRepo dinningRepo, IDataRepo data)
+    public DinningServices(IDinningRepo dinningRepo, IDataRepo data, ITableRepo table)
     {
         _dinning = dinningRepo;
         _data = data;
+        _table = table;
     }
 
     public async Task<List<DinningDTO>> GetDinningDTOsAsync()
@@ -27,7 +30,6 @@ public class DinningServices
             TableId = dinning.TableId,
             Status = dinning.Status,
             StartedAt = dinning.StartedAt,
-            EndedAt = dinning.EndedAt
         }).ToList();
     }
 
@@ -43,22 +45,28 @@ public class DinningServices
             TableId = dinning.TableId,
             Status = dinning.Status,
             StartedAt = dinning.StartedAt,
-            EndedAt = dinning.EndedAt
         };
     }
 
-    public async Task AddDinning(AddDinnerDTO addDinnerDTO)
+    public async Task AddDinning(Guid tableId, AddDinnerDTO addDinnerDTO)
     {
+        var table = await _table.GetRestaurantTableByIdAsync(tableId) ??
+            throw new KeyNotFoundException("Table with this ID not found");
+
+
+        var session = await _dinning.HasActiveSession(tableId);
+        if (session == true)
+        {
+            throw new BadHttpRequestException("Dinning Session is going on, cannot book the table");
+        }
+
         var dinningSessionToAdd = new DinningSession
         {
-            Table = addDinnerDTO.Table,
-            TableId = addDinnerDTO.TableId,
+            TableId = tableId,
+            Table = table,
             Status = addDinnerDTO.Status,
             StartedAt = addDinnerDTO.StartedAt,
-            EndedAt = addDinnerDTO.EndedAt
         };
-
-
 
         await _dinning.AddDinning(dinningSessionToAdd);
         await _data.SaveChangesAsync();
@@ -73,7 +81,6 @@ public class DinningServices
         DinnerSessionToEdit.TableId = editDinnerDTO.TableId;
         DinnerSessionToEdit.Status = editDinnerDTO.Status;
         DinnerSessionToEdit.StartedAt = editDinnerDTO.StartedAt;
-        DinnerSessionToEdit.EndedAt = editDinnerDTO.EndedAt;
 
         await _data.SaveChangesAsync();
     }
