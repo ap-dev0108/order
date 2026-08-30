@@ -5,10 +5,8 @@ namespace OrderManagement.Application.DTO.Dinning;
 
 public class AddDinnerDTO
 {
-   public RestaurantTable Table {get; set;}
+    public DinningStatus Status { get; set; }
 
-    public DinningStatus Status {get; set;}
-
-    public DateTime StartedAt {get; set;} = DateTime.UtcNow;
-    public DateTime EndedAt {get; set;} = DateTime.UtcNow;
+    public DateTime StartedAt { get; set; } = DateTime.UtcNow;
+    public DateTime EndedAt { get; set; } = DateTime.UtcNow;
 }
